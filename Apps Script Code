@@ -1,0 +1,40 @@
+function Macro_v2() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  // Sheets that will be used for Macro
+  var macro_sheet = ss.getSheetByName('Future Projects Macro');
+  var parsed_sheet = ss.getSheetByName('Parsed Future Projects Pipeline');
+  var master_sheet = ss.getSheetByName('Master Future Projects Pipeline');
+  
+  // Value used in for loop to copy and paste for amount of months
+  var value = macro_sheet.getRange('F2').getValue();
+  
+  // Last rows variable used in for loop and second copy paste code
+  var last_row = parsed_sheet.getLastRow();
+  var master_last_row = master_sheet.getLastRow();
+  
+  // Variables used to capture formulas in macro_sheet
+  var form_range = macro_sheet.getRange('A2:G2');
+  var formulas = form_range.getFormulas();
+  
+  // For loop used to copy/paste to parsed_sheet
+  for(var i = 1; i<value; i++){
+    ss.setActiveSheet(macro_sheet);
+    macro_sheet.getRange('A2:G2').activate();
+    ss.setActiveSheet(parsed_sheet);
+    var target_range = parsed_sheet.getRange("A"+(last_row+1)+":B"+(last_row+1)).activate();
+    ss.getRange('\'Future Projects Macro\'!A2:G2').copyTo(ss.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_VALUES, false);
+    parsed_sheet.insertRowAfter(last_row);
+  }
+  
+  // Copy/Paste to master_sheet
+  ss.setActiveSheet(macro_sheet);
+  macro_sheet.getRange('A2:G2').activate();
+  ss.setActiveSheet(master_sheet);
+  var target_range = master_sheet.getRange("A"+(master_last_row+1)+":B"+(master_last_row+1)).activate();
+  ss.getRange('\'Future Projects Macro\'!A2:G2').copyTo(ss.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+  master_sheet.insertRowAfter(master_last_row);
+  
+  // Clear original entry area and copy back the formulas
+  form_range.clearContent();
+  form_range.setFormulas(formulas);
+};

@@ -6,7 +6,7 @@ function Macro_v2() {
   var master_sheet = ss.getSheetByName('Master Future Projects Pipeline');
   
   // Value used in for loop to copy and paste for amount of months
-  var value = macro_sheet.getRange('F2').getValue();
+  var value = macro_sheet.getRange('E2').getValue();
   
   // Last rows variable used in for loop and second copy paste code
   var last_row = parsed_sheet.getLastRow();
